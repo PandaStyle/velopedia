@@ -1,0 +1,25 @@
+<head>
+    <title>velopedia</title>
+</head>
+
+<body>
+{{> hello}}
+</body>
+
+<template name="hello">
+    <div class="time"></div>
+    <div id="container" class="cols">
+    {{#each greeting}}
+        {{#if hasSize}}
+            {{> item}}
+        {{/if}}
+    {{/each}}
+    </div>
+
+</template>
+
+<template name="item">
+    <div class="box">
+        <img src="{{url}}" alt=""/>
+    </div>
+</template>
