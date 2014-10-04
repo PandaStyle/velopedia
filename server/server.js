@@ -3,7 +3,8 @@ if (Meteor.isServer) {
 
     var APIKEY = 'OliOiDDbJHKwXQ4eBqFRP2u3XSU6YzQ15y5wgRYy1r0Js3sm8S';
 
-    var blogUrl = 'apisonadora60.tumblr.com';
+    var cyclingNewsRss = 'http://feeds.feedburner.com/cyclingnews/news?format=xml',
+        cyclingTipsRss = 'http://feeds.feedburner.com/cyclingtipsblog/TJog?format=xml';
 
     var urls = ["bokanev.tumblr.com",
                 "hillsnotpills.tumblr.com",
@@ -20,14 +21,14 @@ if (Meteor.isServer) {
                 "twocirclescycling.tumblr.com",
                 "designbennettrust.tumblr.com",
                 "purecycling.tumblr.com",
-                 "cycloffee.tumblr.com",
-                  "manualforspeed.tumblr.com",
-                  "thestumpone.tumblr.com",
-                  "chrisgibson1985.tumblr.com",
-                  "podiumlegs.tumblr.com",
-                  "gaansari.tumblr.com",
-                   "cheekypeloton.tumblr.com",
-                    "cykln.tumblr.com"];
+                "cycloffee.tumblr.com",
+                "manualforspeed.tumblr.com",
+                "thestumpone.tumblr.com",
+                "chrisgibson1985.tumblr.com",
+                "podiumlegs.tumblr.com",
+                "gaansari.tumblr.com",
+                "cheekypeloton.tumblr.com",
+                "cykln.tumblr.com"];
 
 
 
@@ -66,6 +67,16 @@ if (Meteor.isServer) {
             });
 
             return _.first(unique, 60);
+        },
+
+        getNews: function () {
+            var a = Meteor.http.call("GET", cyclingNewsRss);
+
+            if(a.statusCode == 200){
+                return a;
+            } else {
+                console.log("error: " + a)
+            }
         }
     });
 
@@ -77,4 +88,5 @@ if (Meteor.isServer) {
 
         return Math.floor((utc2 - utc1) / _MS_PER_DAY);
     }
+
 }

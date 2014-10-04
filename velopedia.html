@@ -3,11 +3,13 @@
 </head>
 
 <body>
+<div class="time"></div>
+{{> newslist}}
 {{> hello}}
 </body>
 
 <template name="hello">
-    <div class="time"></div>
+
     <div id="container" class="cols">
     {{#each greeting}}
         {{#if hasSize}}
@@ -21,5 +23,19 @@
 <template name="item">
     <div class="box">
         <img src="{{url}}" alt=""/>
+    </div>
+</template>
+
+<template name="newslist">
+    <div class="left">
+        {{#each list}}
+            {{> newsitem}}
+        {{/each}}
+    </div>
+</template>
+
+<template name="newsitem">
+    <div class="cont">
+        <a class="title" href="{{link}}">{{title}}</a>
     </div>
 </template>
