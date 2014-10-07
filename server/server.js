@@ -17,8 +17,8 @@ if (Meteor.isServer) {
                 "thepacusworld.tumblr.com",
                 "mountbuda.tumblr.com",
                 "ironlegs.tumblr.com",
-                "ototheo.tumblr.com",
-                "twocirclescycling.tumblr.com",
+                "ototheo.tumblr.com"
+                /*"twocirclescycling.tumblr.com",
                 "designbennettrust.tumblr.com",
                 "purecycling.tumblr.com",
                 "cycloffee.tumblr.com",
@@ -28,7 +28,7 @@ if (Meteor.isServer) {
                 "podiumlegs.tumblr.com",
                 "gaansari.tumblr.com",
                 "cheekypeloton.tumblr.com",
-                "cykln.tumblr.com"];
+                "cykln.tumblr.com"*/];
 
 
 
@@ -55,7 +55,7 @@ if (Meteor.isServer) {
             }
             console.log("Finished, start sort");
 
-            var filtered = _.filter(res, function(item){return  dateDiffInDays(new Date(), new Date(item.date)) > -4})
+            var filtered = _.filter(res, function(item){return  dateDiffInDays(new Date(), new Date(item.date)) > -3})
 
             var sorted = _.sortBy(filtered, function(item){return item.note_count}).reverse();
 
@@ -76,6 +76,24 @@ if (Meteor.isServer) {
                 return a;
             } else {
                 console.log("error: " + a)
+            }
+        },
+
+        fetchFromService: function() {
+            var token = "9b0ee979bc8ac6624040c69edabec731a6249597";
+            var url = "https://www.strava.com/api/v3/activities/following";
+            var LIMIT_PER_PAGE = 20;
+            //synchronous GET
+            var result = HTTP.get(url, {params: {access_token: token, page: 1, per_page: LIMIT_PER_PAGE}});
+
+            if(result.statusCode==200) {
+                var respJson = JSON.parse(result.content);
+                console.log("response received.");
+                return respJson;
+            } else {
+                console.log("Response issue: ", result.statusCode);
+                var errorJson = JSON.parse(result.content);
+                throw new Meteor.Error(result.statusCode, errorJson.error);
             }
         }
     });

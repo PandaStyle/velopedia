@@ -3,21 +3,68 @@
 </head>
 
 <body>
-<div class="time"></div>
-{{> newslist}}
-{{> hello}}
+{{>header}}
+{{>left }}
+{{> right}}
 </body>
 
-<template name="hello">
+<template name="header">
+    <header>
+        <span class="logo">VELOPEDIA</span>
+        <span>Loading time: <span class="time"></span></span>
 
-    <div id="container" class="cols">
+        <span class="radios">
+            <input type="radio" name="switch" value="tumblr" checked/>tumblr
+            <input type="radio" name="switch" value="strava"/>strava
+        </span>
+    </header>
+</template>
+
+<template name="right">
+    <div class="right">
+        {{#if tumblrIsVisible}}
+            {{>tumblr}}
+        {{/if}}
+
+        {{#if stravaIsVisible}}
+            {{>strava}}
+        {{/if}}
+    </div>
+</template>
+
+<template name="left">
+    <div class="left">
+        {{>newslist}}
+    </div>
+</template>
+
+
+<template name="strava">
+    <link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.7.3/leaflet.css" />
+    {{#each list}}
+        {{> stravaitem}}
+    {{/each}}
+    <div class="map-list"></div>
+</template>
+
+<template name="stravaitem">
+    <div class="tile">AAA
+       <!-- <div class="profile-pic"><img class="profile-img" src="' +  respJson[i].athlete.profile_medium + '" /></div>\
+        <div class="numbers">\
+            <div class="distance">' +  (respJson[i].distance/1000).toFixed(1) + ' km</div>\
+            <div class="elevation">' +  respJson[i].total_elevation_gain + ' m</div>\
+            <div class="avg-speed">' +  (respJson[i].average_speed*3.6).toFixed(1) + ' km/h</div>\
+        </div>\-->
+    </div>
+</template>
+
+
+<template name="tumblr">
     {{#each greeting}}
         {{#if hasSize}}
             {{> item}}
         {{/if}}
     {{/each}}
-    </div>
-
 </template>
 
 <template name="item">
@@ -26,12 +73,12 @@
     </div>
 </template>
 
+
+
 <template name="newslist">
-    <div class="left">
         {{#each list}}
             {{> newsitem}}
         {{/each}}
-    </div>
 </template>
 
 <template name="newsitem">

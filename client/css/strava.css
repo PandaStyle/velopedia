@@ -1,0 +1,41 @@
+/* CSS declarations go here */
+body {
+    font-family: 'Montserrat', sans-serif;
+    background-color: #eee;
+}
+.map-item { height: 250px; width: 300px;}
+
+.tile {
+    background-color: #fff;
+    display: inline-block;
+    padding: 10px;
+    margin: 25px;
+}
+
+.tile .profile-pic {
+    display: inline-block;
+}
+
+.tile .profile-img {
+    border-radius: 50%;
+    margin: 10px 10PX 0 0;
+}
+
+.tile .numbers  {
+    display: inline-block;
+    vertical-align: top;
+    margin: 10px;
+}
+
+.tile .distance  {
+   font-size: 2em;
+}
+
+.tile .elevation {
+    display: inline-block;
+}
+
+.tile .avg-speed {
+    display: inline-block;
+    margin-left: 10px;
+}
