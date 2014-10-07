@@ -21,6 +21,7 @@ if (Meteor.isClient) {
 
 
     Template.tumblr.created = function(){
+        $('.right').attr('data-feed', 'tumblr');
         var a = new Date();
         Meteor.call("getPosts", function(error, results) {
             if (error) {
@@ -35,7 +36,7 @@ if (Meteor.isClient) {
     }
 
     Template.tumblr.greeting = function () {
-       return Session.get("posts") || [];
+        return Session.get("posts") || [];
     };
 
     Template.tumblr.hasSize = function () {
@@ -73,11 +74,35 @@ if (Meteor.isClient) {
     }
 
     Template.strava.created = function(){
+        $('.right').attr('data-feed', 'strava');
         Meteor.call('fetchFromService', cb);
     }
 
     Template.strava.list = function(){
-      return Session.get("stravaLogs");
+        return Session.get("stravaLogs");
+    }
+
+    Template.stravaitem.rendered = function(){
+
+        if(!this.data.map.summary_polyline){
+            console.log("NO POLYLINE: ", this);
+        } else {
+            var encodedPolyline = this.data.map.summary_polyline.replace(/\\/g, '&#92;');
+            //debugger;
+            var map = new L.Map( $(this.firstNode).find('#' +this.data.id)[0], {
+                zoomControl: false,
+                attributionControl: false,
+                dragging: true,
+                scrollWheelZoom: false
+            });
+
+            L.tileLayer.provider('Hydda.Full').addTo(map);
+
+            var polyline = L.Polyline.fromEncoded(encodedPolyline, {color: 'red', weight: 2.5, opacity: 0.8, smoothFactor: 0.3}).addTo(map);
+
+            map.fitBounds(polyline.getBounds());
+
+        }
     }
 
     function cb(err, respJson){
@@ -91,43 +116,6 @@ if (Meteor.isClient) {
                 if(respJson[i].type != "Ride"){
                     continue;
                 }
-
-                var tile = $('<div class="tile">\
-                            <div class="profile-pic"><img class="profile-img" src="' +  respJson[i].athlete.profile_medium + '" /></div>\
-                            <div class="numbers">\
-                               <div class="distance">' +  (respJson[i].distance/1000).toFixed(1) + ' km</div>\
-                               <div class="elevation">' +  respJson[i].total_elevation_gain + ' m</div>\
-                               <div class="avg-speed">' +  (respJson[i].average_speed*3.6).toFixed(1) + ' km/h</div>\
-                            </div>\
-                          </div>');
-
-                var div = $('<div class="map-item" id="' + respJson[i].id + '">');
-                tile.prepend(div);
-               tile.appendTo(".map-list");
-
-
-
-                if(!respJson[i].map.summary_polyline){
-                    console.log("NO POLYLINE: ", respJson[i]);
-                } else {
-                    var encodedPolyline = respJson[i].map.summary_polyline.replace(/\\/g, '&#92;');
-                    //debugger;
-                    var map = new L.Map( $('#' + respJson[i].id)[0], {
-                        zoomControl: false,
-                        attributionControl: false,
-                        dragging: false,
-                        scrollWheelZoom: false
-                    });
-
-                    L.tileLayer.provider('Hydda.Full').addTo(map);
-
-                    var polyline = L.Polyline.fromEncoded(encodedPolyline, {color: '#fc4c02', weight: 4, opacity: 0.8, smoothFactor: 1}).addTo(map);
-
-                    map.fitBounds(polyline.getBounds());
-
-                }
-
-
             }
 
 
@@ -136,15 +124,3 @@ if (Meteor.isClient) {
 
 
 }
-
-/*
-Meteor.call("getPosts", function(error, results) {
-    if(error){
-        console.log(error);
-    } else {
-        debugger;
-        console.log(results.data.response.posts);
-        Session.set("posts", results.data.response.posts);
-    }
-
-});*/

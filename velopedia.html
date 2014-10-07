@@ -23,11 +23,11 @@
 <template name="right">
     <div class="right">
         {{#if tumblrIsVisible}}
-            {{>tumblr}}
+        {{>tumblr}}
         {{/if}}
 
         {{#if stravaIsVisible}}
-            {{>strava}}
+        {{>strava}}
         {{/if}}
     </div>
 </template>
@@ -42,28 +42,29 @@
 <template name="strava">
     <link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.7.3/leaflet.css" />
     {{#each list}}
-        {{> stravaitem}}
+    {{> stravaitem}}
     {{/each}}
     <div class="map-list"></div>
 </template>
 
 <template name="stravaitem">
-    <div class="tile">AAA
-       <!-- <div class="profile-pic"><img class="profile-img" src="' +  respJson[i].athlete.profile_medium + '" /></div>\
-        <div class="numbers">\
-            <div class="distance">' +  (respJson[i].distance/1000).toFixed(1) + ' km</div>\
-            <div class="elevation">' +  respJson[i].total_elevation_gain + ' m</div>\
-            <div class="avg-speed">' +  (respJson[i].average_speed*3.6).toFixed(1) + ' km/h</div>\
-        </div>\-->
+    <div class="tile">
+        <div class="map-item" id="{{id}}"></div>
+        <div class="profile-pic"><img class="profile-img" src="{{athlete.profile_medium}}" /></div>
+        <div class="numbers">
+            <div class="distance">{{distance}} km</div>
+            <div class="elevation">{{total_elevation_gain}} m</div>
+            <div class="avg-speed">{{average_speed}} km/h</div>
+        </div>
     </div>
 </template>
 
 
 <template name="tumblr">
     {{#each greeting}}
-        {{#if hasSize}}
-            {{> item}}
-        {{/if}}
+    {{#if hasSize}}
+    {{> item}}
+    {{/if}}
     {{/each}}
 </template>
 
@@ -76,9 +77,9 @@
 
 
 <template name="newslist">
-        {{#each list}}
-            {{> newsitem}}
-        {{/each}}
+    {{#each list}}
+    {{> newsitem}}
+    {{/each}}
 </template>
 
 <template name="newsitem">
