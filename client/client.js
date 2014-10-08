@@ -1,7 +1,8 @@
 if (Meteor.isClient) {
 
     Meteor.startup(function(){
-        Session.set("rightContent", $('input[name=switch]').val());
+        $('input[value=strava]').attr('checked', true);
+        Session.set("rightContent", "strava");
     })
 
 
@@ -96,9 +97,9 @@ if (Meteor.isClient) {
                 scrollWheelZoom: false
             });
 
-            L.tileLayer.provider('Hydda.Full').addTo(map);
+            L.tileLayer.provider('OpenMapSurfer.Grayscale').addTo(map);
 
-            var polyline = L.Polyline.fromEncoded(encodedPolyline, {color: 'red', weight: 2.5, opacity: 0.8, smoothFactor: 0.3}).addTo(map);
+            var polyline = L.Polyline.fromEncoded(encodedPolyline, {color: 'red', weight: 3, opacity: 0.8, smoothFactor: 0.4}).addTo(map);
 
             map.fitBounds(polyline.getBounds());
 

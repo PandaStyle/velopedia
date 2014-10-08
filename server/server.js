@@ -55,7 +55,7 @@ if (Meteor.isServer) {
             }
             console.log("Finished, start sort");
 
-            var filtered = _.filter(res, function(item){return  dateDiffInDays(new Date(), new Date(item.date)) > -3})
+            var filtered = _.filter(res, function(item){return  dateDiffInDays(new Date(), new Date(item.date)) > -2})
 
             var sorted = _.sortBy(filtered, function(item){return item.note_count}).reverse();
 

@@ -1,22 +1,20 @@
-/* CSS declarations go here */
-*, *:after, *:before {
-    box-sizing: inherit;
-    -moz-box-sizing: inheri;
-    -webkit-box-sizing: inherit;
-}
-
-html {
-    box-sizing: border-box;
-    -moz-box-sizing: border-box;
-    -webkit-box-sizing: border-box;
-}
 
 body {
     background-color: #f1f1f1;
+    margin-top: 0 !important;
 }
 
 header {
+    background-color: #DBB269;
+    position: fixed;
     width: 100%;
+    z-index: 10;
+}
+
+header .header-wrapper {
+    padding: 10px 10px 23px 10px;
+    background-color:  #f1f1f1;
+    z-index: 5;
 }
 
 header .radios {
@@ -28,7 +26,7 @@ header .logo {
 }
 
 .left {
-    position: absolute;
+    position: fixed;
     width: 400px;
     top: 60px;
     left: 0;
@@ -39,7 +37,7 @@ header .logo {
     position: absolute;
     left: 400px;
     max-width: 1520px;
-    margin: 30px auto;
+    margin: 60px 20px;
 }
 
 .right[data-feed="tumblr"] {
@@ -55,15 +53,11 @@ header .logo {
 }
 
 
-.right .box:first-child{
-    margin-top: 0;
-}
-
 .box {
     width: 100%;
     display: inline-block;
     margin-top: 10px;
-    border: 5px solid #fff;
+    border: 10px solid #fff;
     box-sizing: border-box;
     -moz-box-sizing: border-box;
     -webkit-box-sizing: border-box;
@@ -84,6 +78,10 @@ header .logo {
     padding: 10px;
     background-color: #fff;
     color: #444;
+}
+
+.cont a {
+    text-decoration: none;
 }
 
 
