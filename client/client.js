@@ -1,7 +1,6 @@
 if (Meteor.isClient) {
 
     Meteor.startup(function(){
-        $('input[value=strava]').attr('checked', true);
         Session.set("rightContent", "strava");
     })
 
@@ -76,7 +75,13 @@ if (Meteor.isClient) {
 
     Template.strava.created = function(){
         $('.right').attr('data-feed', 'strava');
-        Meteor.call('fetchFromService', cb);
+        var token = localStorage.getItem('stravaAccessToken');
+
+        if(!token){
+            console.log('not strava authorized user');
+            return;
+        }
+        Meteor.call('fetchFromService', token, cb);
     }
 
     Template.strava.list = function(){
@@ -106,6 +111,10 @@ if (Meteor.isClient) {
         }
     }
 
+    Template.stravaitem.distance = function(){
+        return (this.distance/1000).toFixed(1)
+    }
+
     function cb(err, respJson){
         if(err) {
             window.alert("Error: " + err.reason);
@@ -122,6 +131,36 @@ if (Meteor.isClient) {
 
         }
     }
+
+    Router.map(function () {
+        this.route('stravalogin');  // By default, path = '/about', template = 'about'
+        this.route('stravaauth', {
+            path: '/stravaauth',
+            action: function(){
+                if(this.params){
+                    var code = this.params.code;
+                    Meteor.call('tokenExchange', code, function(error, results) {
+                        if (error) {
+                            console.log(error);
+                        } else {
+                            console.log('Success' + results.access_token);
+                            localStorage.setItem('stravaAccessToken', results.access_token);
+                            Router.go('/');
+                        }
+                        });
+
+                } else {
+                    console.log('this.params undefined')
+                }
+
+
+            }
+        });
+        this.route('home', {
+            path: '/'  //overrides the default '/home'
+        });
+    });
+
 
 
 }

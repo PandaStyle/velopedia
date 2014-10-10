@@ -3,9 +3,10 @@ body {
     font-family: 'Montserrat', sans-serif;
     background-color: #eee;
 }
-.map-item { height: 200px;}
+.map-item { height: 200px; width: 200px;}
 
 .tile {
+    position: relative;
     background-color: #fff;
     display: inline-block;
     padding: 10px;
@@ -13,7 +14,12 @@ body {
 }
 
 .tile .profile-pic {
+
     display: inline-block;
+    position: absolute;
+    top: 5px;
+    left: 15px;
+    opacity: 01;
 }
 
 .tile .profile-img {

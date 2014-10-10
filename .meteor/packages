@@ -10,4 +10,5 @@ jquery
 http
 underscore
 mrt:leaflet
+iron:router
 

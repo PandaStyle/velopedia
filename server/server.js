@@ -3,8 +3,11 @@ if (Meteor.isServer) {
 
     var APIKEY = 'OliOiDDbJHKwXQ4eBqFRP2u3XSU6YzQ15y5wgRYy1r0Js3sm8S';
 
+    var stravaAccessToken;
+
     var cyclingNewsRss = 'http://feeds.feedburner.com/cyclingnews/news?format=xml',
-        cyclingTipsRss = 'http://feeds.feedburner.com/cyclingtipsblog/TJog?format=xml';
+        cyclingTipsRss = 'http://feeds.feedburner.com/cyclingtipsblog/TJog?format=xml',
+        roadCCRSS = 'http://road.cc/all/feed';
 
     var urls = ["bokanev.tumblr.com",
                 "hillsnotpills.tumblr.com",
@@ -70,7 +73,7 @@ if (Meteor.isServer) {
         },
 
         getNews: function () {
-            var a = Meteor.http.call("GET", cyclingNewsRss);
+            var a = Meteor.http.call("GET", roadCCRSS);
 
             if(a.statusCode == 200){
                 return a;
@@ -79,8 +82,13 @@ if (Meteor.isServer) {
             }
         },
 
-        fetchFromService: function() {
-            var token = "9b0ee979bc8ac6624040c69edabec731a6249597";
+        fetchFromService: function(t) {
+            var token = t;
+
+            if(!token){
+                throw new Meteor.Error(100, {reason: "NO Access token for strava"});
+            }
+
             var url = "https://www.strava.com/api/v3/activities/following";
             var LIMIT_PER_PAGE = 20;
             //synchronous GET
@@ -91,6 +99,25 @@ if (Meteor.isServer) {
                 console.log("response received.");
                 return respJson;
             } else {
+                console.log("Response issue: ", result.statusCode);
+                var errorJson = JSON.parse(result.content);
+                throw new Meteor.Error(result.statusCode, errorJson.error);
+            }
+        },
+
+        tokenExchange: function(code){
+            var client_id = 1016,
+                client_secret = '2f90780737db3a91907ff7ac5200e46615a8b396',
+
+                url =  'https://www.strava.com/oauth/token';
+
+            var result = HTTP.post(url, {params: {client_id: client_id, client_secret: client_secret, code: code}});
+            if(result.statusCode==200) {
+                var respJson = JSON.parse(result.content);
+                stravaAccessToken = result.content.access_token;
+                console.log(result.content);
+                return respJson;
+            }else{
                 console.log("Response issue: ", result.statusCode);
                 var errorJson = JSON.parse(result.content);
                 throw new Meteor.Error(result.statusCode, errorJson.error);

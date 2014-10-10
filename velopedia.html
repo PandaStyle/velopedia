@@ -3,10 +3,14 @@
 </head>
 
 <body>
-{{>header}}
-{{>left }}
-{{> right}}
+
 </body>
+
+<template name="home">
+    {{>header}}
+    {{>left}}
+    {{>right}}
+</template>
 
 <template name="header">
     <header>
@@ -15,8 +19,8 @@
             <span>Loading time: <span class="time"></span></span>
 
             <span class="radios">
-                <input type="radio" name="switch" value="tumblr" checked/>tumblr
-                <input type="radio" name="switch" value="strava"/>strava
+                <input type="radio" name="switch" value="tumblr" />tumblr
+                <input type="radio" name="switch" value="strava" checked/>strava
             </span>
         </div>
     </header>
