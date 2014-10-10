@@ -88,27 +88,8 @@ if (Meteor.isClient) {
         return Session.get("stravaLogs");
     }
 
-    Template.stravaitem.rendered = function(){
-
-        if(!this.data.map.summary_polyline){
-            console.log("NO POLYLINE: ", this);
-        } else {
-            var encodedPolyline = this.data.map.summary_polyline.replace(/\\/g, '&#92;');
-            //debugger;
-            var map = new L.Map( $(this.firstNode).find('#' +this.data.id)[0], {
-                zoomControl: false,
-                attributionControl: false,
-                dragging: true,
-                scrollWheelZoom: false
-            });
-
-            L.tileLayer.provider('OpenMapSurfer.Grayscale').addTo(map);
-
-            var polyline = L.Polyline.fromEncoded(encodedPolyline, {color: 'red', weight: 3, opacity: 0.8, smoothFactor: 0.4}).addTo(map);
-
-            map.fitBounds(polyline.getBounds());
-
-        }
+    Template.stravaitem.src = function(){
+        return this.map.summary_polyline;
     }
 
     Template.stravaitem.distance = function(){
@@ -147,7 +128,7 @@ if (Meteor.isClient) {
                             localStorage.setItem('stravaAccessToken', results.access_token);
                             Router.go('/');
                         }
-                        });
+                    });
 
                 } else {
                     console.log('this.params undefined')

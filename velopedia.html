@@ -55,7 +55,9 @@
 
 <template name="stravaitem">
     <div class="tile">
-        <div class="map-item" id="{{id}}"></div>
+        <!--<div class="map-item" id="{{id}}"></div> -->
+        <img class="staticmap" src="https://maps.googleapis.com/maps/api/staticmap?size=400x400&maptype=terrain&path=weight:3%7Ccolor:orange%7Cenc:{{src}}" />
+
         <div class="profile-pic"><img class="profile-img" src="{{athlete.profile_medium}}" /></div>
         <div class="numbers">
             <div class="distance">{{distance}} km</div>
