@@ -1,5 +1,6 @@
 <head>
     <title>velopedia</title>
+    <link href='http://fonts.googleapis.com/css?family=Lato:400,700,900' rel='stylesheet' type='text/css'>
 </head>
 
 <body>
@@ -15,13 +16,14 @@
 <template name="header">
     <header>
         <div class="header-wrapper">
-            <span class="logo">VELOPEDIA</span>
-            <span>Loading time: <span class="time"></span></span>
-
-            <span class="radios">
-                <input type="radio" name="switch" value="tumblr" />tumblr
-                <input type="radio" name="switch" value="strava" checked/>strava
-            </span>
+            <div class="header-inner">
+                <span class="logo">VELOPEDIA</span>
+                <span>Loading time: <span class="time"></span></span>
+                <span class="radios">
+                    <input type="radio" name="switch" value="tumblr" />tumblr
+                    <input type="radio" name="switch" value="strava" checked/>strava
+                </span>
+            </div>
         </div>
     </header>
 </template>
@@ -46,7 +48,6 @@
 
 
 <template name="strava">
-    <link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.7.3/leaflet.css" />
     {{#each list}}
     {{> stravaitem}}
     {{/each}}
@@ -55,14 +56,16 @@
 
 <template name="stravaitem">
     <div class="tile">
-        <!--<div class="map-item" id="{{id}}"></div> -->
-        <img class="staticmap" src="https://maps.googleapis.com/maps/api/staticmap?size=400x400&maptype=terrain&path=weight:3%7Ccolor:orange%7Cenc:{{src}}" />
-
-        <div class="profile-pic"><img class="profile-img" src="{{athlete.profile_medium}}" /></div>
+        <div class="desc">
+            <div class="athlete-name">{{athlete.firstname}} {{athlete.lastname}}</div>
+            <div class="activity-name">{{name}}</div>
+        </div>
+        <img class="staticmap" src="https://maps.googleapis.com/maps/api/staticmap?size=250x250&maptype=terrain&path=weight:3%7Ccolor:0xff0000ff%7Cenc:{{src}}&key=AIzaSyAPFGBr9K2wsB_K6YmOW1Y_QykwzAoS1IE" />
+        <img class="profile-img" src="{{athlete.profile_medium}}" />
         <div class="numbers">
             <div class="distance">{{distance}} km</div>
-            <div class="elevation">{{total_elevation_gain}} m</div>
-            <div class="avg-speed">{{average_speed}} km/h</div>
+            <div class="elevation"><span class="icon icon-mountains"></span>{{total_elevation_gain}} m</div>
+            <div class="kudos_count"><span class="icon icon-like"></span>{{kudos_count}}</div>
         </div>
     </div>
 </template>
@@ -85,9 +88,11 @@
 
 
 <template name="newslist">
-    {{#each list}}
-    {{> newsitem}}
-    {{/each}}
+    <div class="news">
+        {{#each list}}
+        {{> newsitem}}
+        {{/each}}
+    </div>
 </template>
 
 <template name="newsitem">
