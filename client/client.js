@@ -1,14 +1,16 @@
 if (Meteor.isClient) {
-
+    Posts = new Mongo.Collection;
+  
+  
     Meteor.startup(function(){
-        Session.set("rightContent", "strava");
-
+        Session.set("rightContent", "tumblr");
+        Session.set('t_offset', 0);
+      
         $(window).resize(function(){
             $('.news').height($(window).height()-70);
         });
 
     })
-
 
 
     Template.header.events = {
@@ -25,28 +27,70 @@ if (Meteor.isClient) {
         return Session.get("rightContent") == "strava";
     };
 
+    Template.tumblr.rendered = function(){
 
+      console.log('template rendered');
+           $(this.firstNode.parentElement).attr('data-feed', 'tumblr');
+          
+    }
+    
+    Template.item.rendered = function(){
+        
+    }
+    
     Template.tumblr.created = function(){
-        $('.right').attr('data-feed', 'tumblr');
         var a = new Date();
-        Meteor.call("getPosts", function(error, results) {
+        
+    getPosts(0);
+        var container = document.querySelector('#container');
+      var msnry = new Masonry( container );
+        
+        function getPosts(o){
+       
+           Meteor.call("getPosts", o, function(error, results) {
             if (error) {
                 console.log(error);
             } else {
                 $('.time').text(new Date() - a);
-                console.log(results);
-
-                Session.set("posts", results);
+                   console.log(results.length + 'items recieved with offset: ' + o );
+                
+                for(var i=0; i < results.length; i++){
+                  Posts.insert(results[i]);
+                }  
+              console.log('Posts length:' + Posts.find().count());
+              $('#container').masonry({
+                columnWidth: 200,
+                itemSelector: '.item'
+              });
+         $('#container').masonry('reloadItems')
+                if( o < 100){
+                  o+=20;
+                  getPosts(o);
+                }
+              
+              /*  Session.set('t_offset', Session.get('t_offset')+20);
+              
+                setTimeout(function(){
+                         $('.right').waypoint(function(direction) { 
+                           getPosts(Session.get('t_offset'));
+                        }, { offset: 'bottom-in-view' });  
+                  
+                }, 200);*/
+              
             }
-        });
+          }); 
+        }
+      
+        
+      
+      
     }
 
     Template.tumblr.greeting = function () {
-        return Session.get("posts") || [];
+        return Posts.find() || [];
     };
 
     Template.tumblr.hasSize = function () {
-
         return _.where(this.photos[0].alt_sizes, {width: 400}).length>0 ? true : false;
     };
 
@@ -83,8 +127,12 @@ if (Meteor.isClient) {
         return Session.get("news");
     }
 
+    Template.strava.rendered = function(){
+           $(this.firstNode.parentElement).attr('data-feed', 'strava');
+    }
+    
+    
     Template.strava.created = function(){
-        $('.right').attr('data-feed', 'strava');
         var token = localStorage.getItem('stravaAccessToken');
 
         if(!token){

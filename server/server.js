@@ -1,6 +1,15 @@
+var tumblr = Meteor.npmRequire ('tumblr.js');
+var client = tumblr.createClient({
+  consumer_key: 'OliOiDDbJHKwXQ4eBqFRP2u3XSU6YzQ15y5wgRYy1r0Js3sm8S',
+  consumer_secret: 'yL35qiIR8hS6zWJ73VIIPRPZ98qESKavN1zADp5Ws5hxmYZPEZ',
+  token: 'Pp1qDAl6nmzKsVusnk4rb3dh4bvRgrX25nXlnzi20GifPLwuYg',
+  token_secret: 'AqKIT12rq3qV1aI5Oc23LOcZFgYPLJwXbYfuCiRtiFesAY7Rrw'
+});
 
 if (Meteor.isServer) {
 
+  
+  
     var APIKEY = 'OliOiDDbJHKwXQ4eBqFRP2u3XSU6YzQ15y5wgRYy1r0Js3sm8S';
 
     var stravaAccessToken;
@@ -20,18 +29,17 @@ if (Meteor.isServer) {
                 "thepacusworld.tumblr.com",
                 "mountbuda.tumblr.com",
                 "ironlegs.tumblr.com",
-                "ototheo.tumblr.com"
-                /*"twocirclescycling.tumblr.com",
+                "ototheo.tumblr.com",
+                "twocirclescycling.tumblr.com",
                 "designbennettrust.tumblr.com",
                 "purecycling.tumblr.com",
                 "cycloffee.tumblr.com",
                 "manualforspeed.tumblr.com",
                 "thestumpone.tumblr.com",
-                "chrisgibson1985.tumblr.com",
                 "podiumlegs.tumblr.com",
                 "gaansari.tumblr.com",
                 "cheekypeloton.tumblr.com",
-                "cykln.tumblr.com"*/];
+                "cykln.tumblr.com"];
 
 
 
@@ -42,21 +50,30 @@ if (Meteor.isServer) {
     });
 
     Meteor.methods({
-        getPosts: function () {
-
+        getPosts: function (offset) {
+            var startDate = moment();
             this.unblock();
+          
+              
+            var r = Async.runSync(function(done) {    
+              client.dashboard({offset: offset, limit: 20, type: 'photo' }, function (err, data) {
+                   done(err, data);
+                });
+            });
 
-            var res = [];
-
+           console.log("RETURN TO CLIENT " + r.result.posts.length + " items after" +  moment().diff(startDate, 'milliseconds')+ "ms");    
+           return r.result.posts;
+          /*
             for(var i = 0; i < urls.length; i++) {
                 var a = Meteor.http.call("GET", "http://api.tumblr.com/v2/blog/" + urls[i] + "/posts?api_key=" + APIKEY + "&type=photo");
                 if(a.statusCode == 200){
+                    console.log("finished from " + urls[i]);
                     res = res.concat(a.data.response.posts);
                 } else {
-                    console.log("error: " + a)
+                    console.log("error: " + a);
                 }
             }
-            console.log("Finished, start sort");
+            console.log("FETCHED " + res.length + "items from " + urls.length + "blogs in " + moment().diff(startDate, 'milliseconds')+ "ms");
 
             var filtered = _.filter(res, function(item){return  dateDiffInDays(new Date(), new Date(item.date)) > -3})
 
@@ -68,8 +85,9 @@ if (Meteor.isServer) {
                     return correctSize[0].url;
                 }
             });
-
+            console.log("RETURN TO CLIENT the first 60 from " + unique.length + "items after" +  moment().diff(startDate, 'milliseconds')+ "ms");
             return _.first(unique, 60);
+            */
         },
 
         getNews: function () {

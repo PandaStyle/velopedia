@@ -9,8 +9,8 @@
 
 <template name="home">
     {{>header}}
-    {{>left}}
     {{>right}}
+    {{>left}}
 </template>
 
 <template name="header">
@@ -20,8 +20,8 @@
                 <span class="logo">VELOPEDIA</span>
                 <span>Loading time: <span class="time"></span></span>
                 <span class="radios">
-                    <input type="radio" name="switch" value="tumblr" />tumblr
-                    <input type="radio" name="switch" value="strava" checked/>strava
+                    <input type="radio" name="switch" value="tumblr" checked/>tumblr
+                    <input type="radio" name="switch" value="strava" />strava
                 </span>
             </div>
         </div>
@@ -72,15 +72,17 @@
 
 
 <template name="tumblr">
+    <div class="tumblr js-masonry" id="container" data-masonry-options='{ "columnWidth": 200, "itemSelector": ".item" }'>
     {{#each greeting}}
     {{#if hasSize}}
-    {{> item}}
+      {{> item}}
     {{/if}}
     {{/each}}
+  </div>
 </template>
 
 <template name="item">
-    <div class="box">
+    <div class="box item">
         <img src="{{url}}" alt=""/>
     </div>
 </template>
