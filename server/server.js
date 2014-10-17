@@ -1,14 +1,12 @@
 
 
-
-
 if (Meteor.isServer) {
     var tumblr = Meteor.npmRequire ('tumblr.js');
     var client = tumblr.createClient({
-        consumer_key: 'OliOiDDbJHKwXQ4eBqFRP2u3XSU6YzQ15y5wgRYy1r0Js3sm8S',
-        consumer_secret: 'yL35qiIR8hS6zWJ73VIIPRPZ98qESKavN1zADp5Ws5hxmYZPEZ',
-        token: 'Pp1qDAl6nmzKsVusnk4rb3dh4bvRgrX25nXlnzi20GifPLwuYg',
-        token_secret: 'AqKIT12rq3qV1aI5Oc23LOcZFgYPLJwXbYfuCiRtiFesAY7Rrw'
+      consumer_key: 'g0tjMDWC1jHasbTkTdi6jkYz0lcBz9cPMUC3Fz8PnV6LUjmzBo',
+      consumer_secret: 'KFKTyBlIZ6ZeIdBrais2ylfcp052DFnPSVlHQW3VXnb1jj1R5z',
+      token: 'UXqgyWDhidYbH9nIsBg8r2DxQqKxDWmYAsjxiaDMDfYPVlqgIs',
+      token_secret: 'nePBkXogpc7tWzW3E5z6htKPs48N6xJ2v4ldYX7AmhsuFB1Yyu'
     });
   
   

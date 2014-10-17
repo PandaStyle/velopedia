@@ -7,20 +7,17 @@ if (Meteor.isClient) {
 
     var loading = $('.loading') ;
   
+  
     Meteor.startup(function(){
         Session.set("rightContent", "tumblr");
         Session.set('t_offset', 0);
-
-
-
       
         $(window).resize(function(){
             $('.news').height($(window).height()-70);
+            $('.loading').width($(window).width()-400);
         });
 
         $(window).on("scrollstop", scrollHandler);
-
-
     })
 
 
@@ -38,6 +35,10 @@ if (Meteor.isClient) {
         return Session.get("rightContent") == "strava";
     };
 
+    Template.loading.rendered = function(){
+        $(this.firstNode).width($(window).width()-400);       
+    }
+  
     Template.tumblr.rendered = function(){
       console.log('Tumblr template rendered');
       $(this.firstNode.parentElement).attr('data-feed', 'tumblr');

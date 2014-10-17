@@ -87,9 +87,19 @@ header .logo {
 }
 
 .loading {
-    background-color: indianred;
+    position: fixed;
+    background: rgba(151,45,36,0.9);
+  color: #fff;
     height: 100%;
-    display: none;
+    left: 400px;
+    z-index: 100;
+    padding-top: 18%;
+}
+.loading .txt{
+  text-align: center;
+  margin-top: 20px;
+
+  
 }
 
 /*
