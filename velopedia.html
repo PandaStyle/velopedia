@@ -8,9 +8,12 @@
 </body>
 
 <template name="home">
+    {{>loading}}
     {{>header}}
-    {{>right}}
     {{>left}}
+    {{>right}}
+
+
 </template>
 
 <template name="header">
@@ -26,6 +29,13 @@
             </div>
         </div>
     </header>
+</template>
+
+
+<template name="loading">
+    <div class="loading right">
+        LOADING
+    </div>
 </template>
 
 <template name="right">
@@ -72,13 +82,8 @@
 
 
 <template name="tumblr">
-    <div class="tumblr js-masonry" id="container" data-masonry-options='{ "columnWidth": 200, "itemSelector": ".item" }'>
-    {{#each greeting}}
-    {{#if hasSize}}
-      {{> item}}
-    {{/if}}
-    {{/each}}
-  </div>
+    <div class="tumblr" id="container" data-columns></div>
+
 </template>
 
 <template name="item">

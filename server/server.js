@@ -1,13 +1,15 @@
-var tumblr = Meteor.npmRequire ('tumblr.js');
-var client = tumblr.createClient({
-  consumer_key: 'OliOiDDbJHKwXQ4eBqFRP2u3XSU6YzQ15y5wgRYy1r0Js3sm8S',
-  consumer_secret: 'yL35qiIR8hS6zWJ73VIIPRPZ98qESKavN1zADp5Ws5hxmYZPEZ',
-  token: 'Pp1qDAl6nmzKsVusnk4rb3dh4bvRgrX25nXlnzi20GifPLwuYg',
-  token_secret: 'AqKIT12rq3qV1aI5Oc23LOcZFgYPLJwXbYfuCiRtiFesAY7Rrw'
-});
+
+
+
 
 if (Meteor.isServer) {
-
+    var tumblr = Meteor.npmRequire ('tumblr.js');
+    var client = tumblr.createClient({
+        consumer_key: 'OliOiDDbJHKwXQ4eBqFRP2u3XSU6YzQ15y5wgRYy1r0Js3sm8S',
+        consumer_secret: 'yL35qiIR8hS6zWJ73VIIPRPZ98qESKavN1zADp5Ws5hxmYZPEZ',
+        token: 'Pp1qDAl6nmzKsVusnk4rb3dh4bvRgrX25nXlnzi20GifPLwuYg',
+        token_secret: 'AqKIT12rq3qV1aI5Oc23LOcZFgYPLJwXbYfuCiRtiFesAY7Rrw'
+    });
   
   
     var APIKEY = 'OliOiDDbJHKwXQ4eBqFRP2u3XSU6YzQ15y5wgRYy1r0Js3sm8S';
@@ -61,8 +63,16 @@ if (Meteor.isServer) {
                 });
             });
 
-           console.log("RETURN TO CLIENT " + r.result.posts.length + " items after" +  moment().diff(startDate, 'milliseconds')+ "ms");    
-           return r.result.posts;
+            var k = Async.runSync(function(done) {
+                client.dashboard({offset: offset+20, limit: 20, type: 'photo' }, function (err, data) {
+                    done(err, data);
+                });
+            });
+           console.log(k.result.posts);
+
+
+           console.log("RETURN TO CLIENT " + r.result.posts.length + k.result.posts.length + " items after" +  moment().diff(startDate, 'milliseconds')+ "ms");
+           return r.result.posts.concat(k.result.posts);
           /*
             for(var i = 0; i < urls.length; i++) {
                 var a = Meteor.http.call("GET", "http://api.tumblr.com/v2/blog/" + urls[i] + "/posts?api_key=" + APIKEY + "&type=photo");

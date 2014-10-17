@@ -1,14 +1,25 @@
 if (Meteor.isClient) {
     Posts = new Mongo.Collection;
-  
+    var getPostTriggered = true;
+    var smallestColumnOffset;
+
+    var postItemCount = 40;
+
+    var loading = $('.loading') ;
   
     Meteor.startup(function(){
         Session.set("rightContent", "tumblr");
         Session.set('t_offset', 0);
+
+
+
       
         $(window).resize(function(){
             $('.news').height($(window).height()-70);
         });
+
+        $(window).on("scrollstop", scrollHandler);
+
 
     })
 
@@ -28,62 +39,94 @@ if (Meteor.isClient) {
     };
 
     Template.tumblr.rendered = function(){
+      console.log('Tumblr template rendered');
+      $(this.firstNode.parentElement).attr('data-feed', 'tumblr');
 
-      console.log('template rendered');
-           $(this.firstNode.parentElement).attr('data-feed', 'tumblr');
-          
     }
     
     Template.item.rendered = function(){
-        
+
     }
     
     Template.tumblr.created = function(){
+        getPosts(0);
+    }
+
+    function scrollHandler() {
+       var b = $(window).scrollTop() + $(window).height();
+       if (b >= smallestColumnOffset || b >= $(document).height() ) {
+           $(window).off("scrollstop");
+
+
+           if(getPostTriggered){
+               getPostTriggered = false;
+
+               getPosts((Session.get('t_offset')));
+           }
+
+       };
+    }
+
+    function getColumnHeights() {
+        for (var b = $(".column"), c = null, d = 0, e = b.length; e > d; d++) {
+            var f = $(b[d]);
+
+        }
+    }
+
+    function getPosts(o){
         var a = new Date();
-        
-    getPosts(0);
-        var container = document.querySelector('#container');
-      var msnry = new Masonry( container );
-        
-        function getPosts(o){
-       
-           Meteor.call("getPosts", o, function(error, results) {
+
+        $('.loading').show();
+
+        Meteor.call("getPosts", o, function(error, results) {
             if (error) {
                 console.log(error);
             } else {
                 $('.time').text(new Date() - a);
-                   console.log(results.length + 'items recieved with offset: ' + o );
-                
-                for(var i=0; i < results.length; i++){
-                  Posts.insert(results[i]);
-                }  
-              console.log('Posts length:' + Posts.find().count());
-              $('#container').masonry({
-                columnWidth: 200,
-                itemSelector: '.item'
-              });
-         $('#container').masonry('reloadItems')
-                if( o < 100){
-                  o+=20;
-                  getPosts(o);
+                console.log(results.length + 'items recieved with offset: ' + o );
+                console.log(results);
+                Session.set('t_offset', (Session.get('t_offset') + postItemCount));
+
+                if(o == 0){
+                    salvattore.register_grid($('.tumblr')[0]);
                 }
-              
-              /*  Session.set('t_offset', Session.get('t_offset')+20);
-              
-                setTimeout(function(){
-                         $('.right').waypoint(function(direction) { 
-                           getPosts(Session.get('t_offset'));
-                        }, { offset: 'bottom-in-view' });  
-                  
-                }, 200);*/
-              
+
+                var arr = [];
+                var fragment = $('<div />');
+                for(var i=0; i < results.length; i++){
+
+                    if(_.where(results[i].photos[0].alt_sizes, {width: 400}).length>0){
+                        var url = _.where(results[i].photos[0].alt_sizes, {width: 400})[0].url;
+                    } else {
+                        continue;
+                    }
+
+                    var item = $(' <div class="box item">\
+                                <img src="' + url + '" alt=""/>\
+                                </div>');
+
+                    fragment.append(item);
+                    arr.push(item[0]);
+
+                };
+
+                fragment.imagesLoaded().done(function(a, b){
+                  /*  for(var i=0; i < arr.length; i++){
+                        salvattore.append_elements($('.tumblr')[0], [arr[i]]);
+                    }*/
+                    salvattore.append_elements($('.tumblr')[0], arr);
+
+
+                    getColumnHeights();
+
+                    $(window).on("scrollstop", scrollHandler);getPostTriggered = true;
+                    $('.loading').hide();
+                });
+
             }
-          }); 
-        }
-      
-        
-      
-      
+
+        });
     }
 
     Template.tumblr.greeting = function () {

@@ -11,4 +11,13 @@ mrt:leaflet
 iron:router
 mrt:normalize.css
 natestrauser:animate-css
+meteorhacks:async
+mrt:moment
+sjors:meteor-masonry
+meteorhacks:npm
+
+
+npm-container
+mrt:jquery-imagesloaded
+jquery-waypoints
 
