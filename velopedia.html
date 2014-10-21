@@ -10,25 +10,26 @@
 <template name="home">
     {{>loading}}
     {{>header}}
-     {{>right}}
+    {{>right}}
     {{>left}}
- 
+
 </template>
 
 <template name="header">
     <header>
-        <div class="header-wrapper">
+
             <div class="header-inner">
-                <span class="logo">VELOPEDIA</span>
+                <a href="/" class="logo"><img src="Velopedia-logo.png" alt=""/></a>
                 <span>Loading time: <span class="time"></span></span>
                 <span class="radios">
                     <input type="radio" name="switch" value="tumblr" checked/>tumblr
                     <input type="radio" name="switch" value="strava" />strava
                 </span>
             </div>
-        </div>
+
     </header>
 </template>
+
 
 
 <template name="loading">

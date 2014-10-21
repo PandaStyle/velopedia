@@ -13,7 +13,7 @@ if (Meteor.isClient) {
         Session.set('t_offset', 0);
       
         $(window).resize(function(){
-            $('.news').height($(window).height()-70);
+            $('.news').height($(window).height()-90);
             $('.loading').width($(window).width()-400);
         });
 
@@ -38,6 +38,8 @@ if (Meteor.isClient) {
     Template.loading.rendered = function(){
         $(this.firstNode).width($(window).width()-400);       
     }
+
+
   
     Template.tumblr.rendered = function(){
       console.log('Tumblr template rendered');

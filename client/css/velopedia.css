@@ -5,24 +5,16 @@ body {
 }
 
 header {
-    background-color: #DBB269;
     position: fixed;
     top: 0;
     width: 100%;
     z-index: 10;
-    background-color: #A25757;
-    height: 50px;
+    background-color: #fff;
+    border-bottom: 4px solid #B6ABAB;
+    height: 90px;
 }
-
-header .header-wrapper {
-    padding: 0px 0px 23px 0px;
-    background-color:  #f1f1f1;
-    z-index: 5;
-}
-
-header .header-inner {
-    background-color: #A36A6A;
-    padding: 10px;
+header .logo img{
+    height: 90px;
 }
 
 header .radios {
@@ -33,10 +25,42 @@ header .logo {
     font-size: 2em;
 }
 
+.tabs {
+    left: 0;
+    background: rgb(223, 223, 223);
+    position: absolute;
+    top: 47px;
+    width: 100%;
+    z-index: 10;
+}
+
+.tabs .tabs-left,
+.tabs .tabs-right{
+    display: inline-block;
+}
+
+.tabs .tabs-left {
+    width: 400px;
+}
+
+.tabs .tabs-left img{
+    width: 40px
+}
+
+.tabs .tabs-tumblr {
+    display: inline-block;
+    width: 50%;
+}
+
+.tabs .tabs-strava {
+    display: inline-block;
+    width: 49.7%;
+}
+
 .left {
     position: fixed;
     width: 400px;
-    top: 70px;
+    top: 90px;
     left: 0;
     height: 100%;
     overflow-x: hidden;
@@ -52,7 +76,8 @@ header .logo {
 }
 
 .cont {
-    margin: 10px 15px 10px 10px;
+    border-bottom: 1px solid #e4e4e4;
+    margin: 0px 15px 0px 0px;
     padding: 10px;
     background-color: #fff;
 }
@@ -65,7 +90,7 @@ header .logo {
 
 .right {
    position: relative;
-    margin: 0 20px 70px 400px;
+    margin: 90px 0 90px 400px;
     max-width: 1520px;
 }
 .right .tumblr {
@@ -73,11 +98,14 @@ header .logo {
 }
 
 .box {
-
+    margin: 10px 5px;
+    border: 5px solid #fff;
     -moz-transition: all .4s ease-out;
     -ms-transition: all .4s ease-out;
     -o-transition: all .4s ease-out;
     transition: all .4s ease-out;
+    border-radius: 3px;
+    box-shadow: 0px 2px 0 #ccc;
 }
 
 .box img {
