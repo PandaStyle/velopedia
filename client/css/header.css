@@ -1,0 +1,65 @@
+header {
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: 10;
+    background-color: #fff;
+    border-bottom: 4px solid #B6ABAB;
+    height: 70px;
+}
+header .logo img{
+    height: 70px;
+    vertical-align: middle;
+}
+
+header .radios {
+    float: right;
+}
+
+header .logo {
+    font-size: 2em;
+}
+
+header .header-icon {
+    PADDING: 24px 80px 24px 24px;
+    display: inline-block;
+    padding: 24px;
+}
+
+header .downarrow {
+    display: none;
+}
+
+header .downarrow:hover {
+    cursor: pointer;
+    color: #fff;
+    transform: translateY(5px);
+    -webkit-transform: translateY(5px);
+}
+
+
+
+header .header-icon:hover {
+    background-color: #0078A8;
+    color: #fff;
+}
+header .header-icon:hover .downarrow{
+    color: #e4e4e4;
+    display: inline-block;
+}
+header .header-icon:hover .icon-title{
+    margin-right: 80px;
+}
+
+header .buttons {
+    display: inline-block;
+    margin-left: 265px;
+}
+
+header .buttons .icon-title {
+    margin-right: 100px;
+    margin-left: 10px;
+}
+
+
+

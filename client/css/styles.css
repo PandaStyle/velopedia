@@ -25,11 +25,11 @@
 
 @font-face {
     font-family: "Flaticon";
-    src: url("flaticon.eot");
-    src: url("flaticon.eot#iefix") format("embedded-opentype"),
-    url("flaticon.woff") format("woff"),
-    url("flaticon.ttf") format("truetype"),
-    url("flaticon.svg") format("svg");
+    src: url("fonts/flaticon.eot");
+    src: url("fonts/flaticon.eot#iefix") format("embedded-opentype"),
+    url("fonts/flaticon.woff") format("woff"),
+    url("fonts/flaticon.ttf") format("truetype"),
+    url("fonts/flaticon.svg") format("svg");
     font-weight: normal;
     font-style: normal;
 }
@@ -38,12 +38,10 @@
     font-family: Flaticon;
     font-size: 20px;
     font-style: normal;
-    margin-left: 20px;
 }
 
 
-
-    [data-icon]:before {
+[data-icon]:before {
   font-family: "untitled-font-2" !important;
   content: attr(data-icon);
   font-style: normal !important;
@@ -91,24 +89,27 @@
 }
 
 
-.flaticon-four2:before {
+.flaticon-arrow483:before {
     content: "\e000";
 }
-.flaticon-location2:before {
+.flaticon-four2:before {
     content: "\e001";
 }
-.flaticon-phone336:before {
+.flaticon-location2:before {
     content: "\e002";
 }
-.flaticon-six23:before {
+.flaticon-phone336:before {
     content: "\e003";
 }
-.flaticon-small58:before {
+.flaticon-six23:before {
     content: "\e004";
 }
-.flaticon-text146:before {
+.flaticon-small58:before {
     content: "\e005";
 }
-.flaticon-tumblr2:before {
+.flaticon-text146:before {
     content: "\e006";
+}
+.flaticon-tumblr2:before {
+    content: "\e007";
 }
