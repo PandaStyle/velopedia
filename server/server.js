@@ -1,15 +1,16 @@
 
 
 if (Meteor.isServer) {
+
     var tumblr = Meteor.npmRequire ('tumblr.js');
     var client = tumblr.createClient({
-      consumer_key: 'g0tjMDWC1jHasbTkTdi6jkYz0lcBz9cPMUC3Fz8PnV6LUjmzBo',
-      consumer_secret: 'KFKTyBlIZ6ZeIdBrais2ylfcp052DFnPSVlHQW3VXnb1jj1R5z',
-      token: 'UXqgyWDhidYbH9nIsBg8r2DxQqKxDWmYAsjxiaDMDfYPVlqgIs',
-      token_secret: 'nePBkXogpc7tWzW3E5z6htKPs48N6xJ2v4ldYX7AmhsuFB1Yyu'
+        consumer_key: 'g0tjMDWC1jHasbTkTdi6jkYz0lcBz9cPMUC3Fz8PnV6LUjmzBo',
+        consumer_secret: 'KFKTyBlIZ6ZeIdBrais2ylfcp052DFnPSVlHQW3VXnb1jj1R5z',
+        token: 'UXqgyWDhidYbH9nIsBg8r2DxQqKxDWmYAsjxiaDMDfYPVlqgIs',
+        token_secret: 'nePBkXogpc7tWzW3E5z6htKPs48N6xJ2v4ldYX7AmhsuFB1Yyu'
     });
-  
-  
+
+
     var APIKEY = 'OliOiDDbJHKwXQ4eBqFRP2u3XSU6YzQ15y5wgRYy1r0Js3sm8S';
 
     var stravaAccessToken;
@@ -18,85 +19,37 @@ if (Meteor.isServer) {
         cyclingTipsRss = 'http://feeds.feedburner.com/cyclingtipsblog/TJog?format=xml',
         roadCCRSS = 'http://road.cc/all/feed';
 
-    var urls = ["bokanev.tumblr.com",
-                "hillsnotpills.tumblr.com",
-                "bidonmagazin.tumblr.com",
-                "embrocationcycling.tumblr.com",
-                "coxcycling.tumblr.com",
-                "theblueandred.tumblr.com",
-                "laerodynamique.tumblr.com",
-                "cyclocosm.tumblr.com",
-                "thepacusworld.tumblr.com",
-                "mountbuda.tumblr.com",
-                "ironlegs.tumblr.com",
-                "ototheo.tumblr.com",
-                "twocirclescycling.tumblr.com",
-                "designbennettrust.tumblr.com",
-                "purecycling.tumblr.com",
-                "cycloffee.tumblr.com",
-                "manualforspeed.tumblr.com",
-                "thestumpone.tumblr.com",
-                "podiumlegs.tumblr.com",
-                "gaansari.tumblr.com",
-                "cheekypeloton.tumblr.com",
-                "cykln.tumblr.com"];
+    // Add access points for `GET`
+    HTTP.publish({name: 'getposts'}, function(data) {
+        var offset = data ? data.offset : 0;
 
+        var startDate = moment();
 
+        var r = Async.runSync(function(done) {
+            client.dashboard({offset: offset, limit: 20, type: 'photo' }, function (err, data) {
+                done(err, data);
+            });
+        });
 
+        var k = Async.runSync(function(done) {
+            client.dashboard({offset: offset+20, limit: 20, type: 'photo' }, function (err, data) {
+                done(err, data);
+            });
+        });
 
+        var concated = r.result.posts.concat(k.result.posts);
 
-    Meteor.startup(function () {
+        var Scratchpad = new Mongo.Collection;
+        for(var i = 0; i < concated.length; i++){
+            Scratchpad.insert(concated[i]);
+        }
 
+        console.log(concated.length + " items fetched from tumblr in" + moment().diff(startDate, 'milliseconds')+ "ms")
+
+        return Scratchpad.find({});
     });
 
     Meteor.methods({
-        getPosts: function (offset) {
-            var startDate = moment();
-            this.unblock();
-          
-              
-            var r = Async.runSync(function(done) {    
-              client.dashboard({offset: offset, limit: 20, type: 'photo' }, function (err, data) {
-                   done(err, data);
-                });
-            });
-
-            var k = Async.runSync(function(done) {
-                client.dashboard({offset: offset+20, limit: 20, type: 'photo' }, function (err, data) {
-                    done(err, data);
-                });
-            });
-           console.log(k.result.posts);
-
-
-           console.log("RETURN TO CLIENT " + r.result.posts.length + k.result.posts.length + " items after" +  moment().diff(startDate, 'milliseconds')+ "ms");
-           return r.result.posts.concat(k.result.posts);
-          /*
-            for(var i = 0; i < urls.length; i++) {
-                var a = Meteor.http.call("GET", "http://api.tumblr.com/v2/blog/" + urls[i] + "/posts?api_key=" + APIKEY + "&type=photo");
-                if(a.statusCode == 200){
-                    console.log("finished from " + urls[i]);
-                    res = res.concat(a.data.response.posts);
-                } else {
-                    console.log("error: " + a);
-                }
-            }
-            console.log("FETCHED " + res.length + "items from " + urls.length + "blogs in " + moment().diff(startDate, 'milliseconds')+ "ms");
-
-            var filtered = _.filter(res, function(item){return  dateDiffInDays(new Date(), new Date(item.date)) > -3})
-
-            var sorted = _.sortBy(filtered, function(item){return item.note_count}).reverse();
-
-            var unique = _.uniq(sorted, true, function(item){
-                var correctSize = _.where(item.photos[0].alt_sizes, {width: 400});
-                if(correctSize.length > 0) {
-                    return correctSize[0].url;
-                }
-            });
-            console.log("RETURN TO CLIENT the first 60 from " + unique.length + "items after" +  moment().diff(startDate, 'milliseconds')+ "ms");
-            return _.first(unique, 60);
-            */
-        },
 
         getNews: function () {
             var a = Meteor.http.call("GET", roadCCRSS);
@@ -151,13 +104,5 @@ if (Meteor.isServer) {
         }
     });
 
-    function dateDiffInDays(a, b) {
-        var _MS_PER_DAY = 1000 * 60 * 60 * 24;
-        // Discard the time and time-zone information.
-        var utc1 = Date.UTC(a.getFullYear(), a.getMonth(), a.getDate());
-        var utc2 = Date.UTC(b.getFullYear(), b.getMonth(), b.getDate());
-
-        return Math.floor((utc2 - utc1) / _MS_PER_DAY);
-    }
 
 }

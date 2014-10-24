@@ -20,4 +20,5 @@ meteorhacks:npm
 npm-container
 mrt:jquery-imagesloaded
 jquery-waypoints
+cfs:http-publish
 

@@ -52,7 +52,11 @@ if (Meteor.isClient) {
     }
     
     Template.tumblr.created = function(){
-        getPosts(0);
+        $.get( "/getposts", {offset: 0},  function( data ) {
+            console.log("from ajax");
+            console.log(data)
+
+        });
     }
 
     function scrollHandler() {
