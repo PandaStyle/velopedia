@@ -21,4 +21,5 @@ npm-container
 mrt:jquery-imagesloaded
 jquery-waypoints
 cfs:http-publish
+peerlibrary:xml2js
 

@@ -47,6 +47,8 @@ natestrauser:animate-css@3.1.2
 npm-container@1.0.0
 observe-sequence@1.0.3
 ordered-dict@1.0.1
+peerlibrary:blocking@0.4.2
+peerlibrary:xml2js@0.4.4_3
 random@1.0.1
 reactive-dict@1.0.4
 reactive-var@1.0.3

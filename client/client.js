@@ -3,7 +3,7 @@ if (Meteor.isClient) {
     var getPostTriggered = true;
     var smallestColumnOffset;
 
-    var postItemCount = 40;
+    var postItemCount = 20;
 
     var loading = $('.loading') ;
   

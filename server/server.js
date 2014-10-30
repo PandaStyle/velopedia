@@ -1,6 +1,9 @@
 
 
 if (Meteor.isServer) {
+    var News = new Mongo.Collection;
+    var Scratchpad = new Mongo.Collection;
+
 
     var tumblr = Meteor.npmRequire ('tumblr.js');
     var client = tumblr.createClient({
@@ -19,10 +22,43 @@ if (Meteor.isServer) {
         cyclingTipsRss = 'http://feeds.feedburner.com/cyclingtipsblog/TJog?format=xml',
         roadCCRSS = 'http://road.cc/all/feed';
 
+    HTTP.publish({name: 'getnews'}, function(data) {
+        var url = this.query.url;
+
+
+        var res = Meteor.http.call("GET", url);
+
+        if(res.statusCode == 200){
+            if(News){
+                News.remove({});
+            }
+
+
+
+            xml2js.parseStringSync(res.content, function (err, result) {
+                var items = result.rss.channel[0].item;
+
+                var arr  = _.map(items, function(el){
+                    return {title: el.title[0], link: el.link[0]};
+                })
+
+                for(var i = 0; i < arr.length; i++){
+                    News.insert(arr[i]);
+                }
+            });
+
+            return News.find({});
+
+        } else {
+            console.log("error on getNews: " + res)
+        }
+    });
+
     // Add access points for `GET`
     HTTP.publish({name: 'getposts'}, function(data) {
-        var offset = data ? data.offset : 0;
 
+        var offset = this.query.offset ? this.query.offset : 0;
+console.log('offset: ' + offset);
         var startDate = moment();
 
         var r = Async.runSync(function(done) {
@@ -31,15 +67,10 @@ if (Meteor.isServer) {
             });
         });
 
-        var k = Async.runSync(function(done) {
-            client.dashboard({offset: offset+20, limit: 20, type: 'photo' }, function (err, data) {
-                done(err, data);
-            });
-        });
+        var concated = r.result.posts;
 
-        var concated = r.result.posts.concat(k.result.posts);
+        Scratchpad.remove({});
 
-        var Scratchpad = new Mongo.Collection;
         for(var i = 0; i < concated.length; i++){
             Scratchpad.insert(concated[i]);
         }
