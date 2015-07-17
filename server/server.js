@@ -18,40 +18,51 @@ if (Meteor.isServer) {
 
     var stravaAccessToken;
 
-    var cyclingNewsRss = 'http://feeds.feedburner.com/cyclingnews/news?format=xml',
+    var rssUrls = [
+        cyclingNewsRss = 'http://feeds.feedburner.com/cyclingnews/news?format=xml',
         cyclingTipsRss = 'http://feeds.feedburner.com/cyclingtipsblog/TJog?format=xml',
-        roadCCRSS = 'http://road.cc/all/feed';
+        roadCCRSS = 'http://road.cc/all/feed'
+    ];
 
     HTTP.publish({name: 'getnews'}, function(data) {
-        var url = this.query.url;
 
-
-        var res = Meteor.http.call("GET", url);
-
-        if(res.statusCode == 200){
-            if(News){
-                News.remove({});
-            }
-
-
-
-            xml2js.parseStringSync(res.content, function (err, result) {
-                var items = result.rss.channel[0].item;
-
-                var arr  = _.map(items, function(el){
-                    return {title: el.title[0], link: el.link[0]};
-                })
-
-                for(var i = 0; i < arr.length; i++){
-                    News.insert(arr[i]);
-                }
-            });
-
-            return News.find({});
-
-        } else {
-            console.log("error on getNews: " + res)
+        if(News){
+            News.remove({});
         }
+
+        for(var j = 0; j < rssUrls.length; j++ ){
+            var url = rssUrls[j];
+
+            var res = Meteor.http.call("GET", url);
+
+            if(res.statusCode == 200){
+
+                xml2js.parseStringSync(res.content, function (err, result) {
+
+
+                    var items = result.rss.channel[0].item;
+
+
+                    var arr  = _.map(items, function(el){
+                        return {site: rssUrls[j], title: el.title[0], link: el.link[0], date:new Date(el.pubDate[0]), diff:  moment.duration(moment().diff(moment(new Date(el.pubDate[0])))).humanize()};
+                    })
+
+                    for(var i = 0; i < arr.length; i++){
+                        News.insert(arr[i]);
+                    }
+                });
+
+            } else {
+                console.log("error on getNews: " + res)
+            }
+        }
+
+        var a = News.find({}, {sort: {date: -1}});
+        a.forEach(function (row) {
+            console.log(row.diff, " --- ", row.site, " --- ", row.title);
+        });
+        return a;
+
     });
 
     // Add access points for `GET`
