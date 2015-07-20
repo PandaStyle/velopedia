@@ -19,9 +19,31 @@ if (Meteor.isServer) {
     var stravaAccessToken;
 
     var rssUrls = [
-        cyclingNewsRss = 'http://feeds.feedburner.com/cyclingnews/news?format=xml',
-        cyclingTipsRss = 'http://feeds.feedburner.com/cyclingtipsblog/TJog?format=xml',
-        roadCCRSS = 'http://road.cc/all/feed'
+            {
+                name:"cyclingNews",
+                url:'http://feeds.feedburner.com/cyclingnews/news?format=xml',
+                short: "cyclingnews.com"
+            },
+            {
+                name: "cyclingTips",
+                url:'http://feeds.feedburner.com/cyclingtipsblog/TJog?format=xml',
+                short: "cyclingtips.com.au"
+            },
+            {
+                name: "roadCc",
+                url:'http://road.cc/all/feed',
+                short: "road.cc"
+            },
+            {
+                name: "roadCycling",
+                url:'http://feeds2.feedburner.com/roadcycling/ZlDv',
+                short: "roadcycling.com"
+            },
+            {
+                name: "roadBikeAction",
+                url:'http://roadbikeaction.com/feed',
+                short: "roadbikeaction.com"
+            }
     ];
 
     HTTP.publish({name: 'getnews'}, function(data) {
@@ -31,7 +53,7 @@ if (Meteor.isServer) {
         }
 
         for(var j = 0; j < rssUrls.length; j++ ){
-            var url = rssUrls[j];
+            var url = rssUrls[j].url;
 
             var res = Meteor.http.call("GET", url);
 
@@ -39,12 +61,17 @@ if (Meteor.isServer) {
 
                 xml2js.parseStringSync(res.content, function (err, result) {
 
-
                     var items = result.rss.channel[0].item;
 
-
                     var arr  = _.map(items, function(el){
-                        return {site: rssUrls[j], title: el.title[0], link: el.link[0], date:new Date(el.pubDate[0]), diff:  moment.duration(moment().diff(moment(new Date(el.pubDate[0])))).humanize()};
+                        return {
+                            site: rssUrls[j]["name"],
+                            title: el.title[0],
+                            link: el.link[0],
+                            date:new Date(el.pubDate[0]),
+                            diff:  moment.duration(moment().diff(moment(new Date(el.pubDate[0])))).humanize(),
+                            shortSiteName: rssUrls[j]["short"]
+                        };
                     })
 
                     for(var i = 0; i < arr.length; i++){
@@ -91,7 +118,9 @@ console.log('offset: ' + offset);
         return Scratchpad.find({});
     });
 
-    Meteor.methods({
+
+
+    /*Meteor.methods({
 
         getNews: function () {
             var a = Meteor.http.call("GET", roadCCRSS);
@@ -144,7 +173,5 @@ console.log('offset: ' + offset);
                 throw new Meteor.Error(result.statusCode, errorJson.error);
             }
         }
-    });
-
-
+    });*/
 }
